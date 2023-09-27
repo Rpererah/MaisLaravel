@@ -14,8 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    redirect('/series');
-});
 
 Route::resource('/series',SeriesController::class);

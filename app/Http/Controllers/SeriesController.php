@@ -9,10 +9,11 @@ class SeriesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $series=Serie::all();
         //$series=\DB::select("SELECT nome FROM series");
+        $mensagemDeSucesso=$request->session()->get('mensagem.sucesso');
         return view('series.index',compact("series"));
     }
 
@@ -54,23 +55,26 @@ class SeriesController extends Controller
      */
     public function edit(Serie $series)
     {
-        return view('insere.blade.php',compact("series"));
+        return view('series.atualiza',compact("series"));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Serie $series)
     {
-        
+        $series->fill($request->all());
+        $series->save();
+        return to_route('series.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(Request $request)
     {
-        Serie::destroy($id);
+        Serie::destroy($request->id);
+        $request->session()->put('mensagem.sucesso','Serie removida com sucesso');
         return to_route('series.index');
     }
 }
